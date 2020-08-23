@@ -38,11 +38,16 @@
                         <div class="post-comments-list">
                             <ul id="post-comments-<%= post._id%>">
                                 <% for(comment of post.comments){ %>
+                                    <li>
+                                    <% if(locals.user && ((locals.user.id == comment.user.id) || (locals.user.id == post.user.id))) {%>
+                                        <a href="/comments/destroy/<%= comment.id%>">X</a>
+                                        <% } %>
                                     <%= comment.content%>
                                     <br>
                                     <small>
                                         <%= comment.user.name%>
                                     </small>
+                                    </li>
                                 <% } %>
                             </ul>
                         </div>
