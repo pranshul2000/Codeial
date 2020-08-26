@@ -10,7 +10,7 @@ let transpoter = nodemailer.createTransport({
     secure: false,
     auth: {
         user: 'testmailer.pg',
-        pass: 'pranshul.mailer'
+        pass: '*********'
     }
 
 });
