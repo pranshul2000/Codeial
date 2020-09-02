@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+
 const postSchema = new mongoose.Schema({
     content: {
         type: String,
@@ -15,7 +16,14 @@ const postSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Comment'
         }
+    ],
+    likes: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Like'
+        }
     ]
+
 },{
     timestamps: true
 });

@@ -1,5 +1,7 @@
 const Post = require('../models/post');
 const Comment = require('../models/comment');
+const Like = require('../models/like');
+const { findById } = require('../models/post');
 
 module.exports.create = async function (req, res) {
 
@@ -8,8 +10,17 @@ module.exports.create = async function (req, res) {
             content: req.body.content,
             user: req.user._id
         });
+        // post = await findById(post._id).populate('user'); 
+        
+        // console.log(post);
 
         if(req.xhr){
+
+            post = await Post.findById(post._id).populate({
+                path: 'user',
+                select: '-password'
+            });
+
             return res.status(200).json({
                 data: {
                     post: post
@@ -33,8 +44,14 @@ module.exports.destroy = async function (req, res) {
         let post = await Post.findById(req.params.id);
 
         if (post.user == req.user.id) {
+
+            await Like.deleteMany({likeable: post, onModel: 'Post'});
+            await Like.deleteMany({_id: {$in: post.comment}});
+
+
             post.remove();
             await Comment.deleteMany({ post: req.params.id });
+            
 
             if(req.xhr){
                 return res.status(200).json({
