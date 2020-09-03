@@ -1,3 +1,14 @@
+const fs = require('fs');
+const rfs = require('rotating-file-stream');
+const path = require('path');
+
+const logDirectory = path.join(__dirname, '../production_logs');
+fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
+
+const accessLogStream = rfs.createStream('access.log', {
+    interval: '1d',
+    path: logDirectory
+});
 
 const develpoment = {
     name: 'development',
@@ -20,7 +31,12 @@ const develpoment = {
     facebook_clint_id: '332539968117863',
     facebook_clint_secret: '',
     facebook_callback_url: 'http://localhost:8000/users/auth/facebook/callback',
-    jwt_secret: 'codeial'
+    jwt_secret: 'codeial',
+    morgan :{
+        mode: 'dev',
+        options: {stream: accessLogStream}
+
+    }
 }
 
 const production = {
@@ -44,7 +60,12 @@ const production = {
     facebook_clint_id: process.env.codeial_facebook_clint_id,
     facebook_clint_secret: process.env.codeial_facebook_clint_secret,
     facebook_callback_url: process.env.codeial_facebook_callback_url,
-    jwt_secret: process.env.codeial_jwt_secret
+    jwt_secret: process.env.codeial_jwt_secret,
+    morgan :{
+        mode: 'combined',
+        options: {stream: accessLogStream}
+
+    }
 }
 
 // module.exports = eval(process.env.NODE_ENV) == undefined ? develpoment: eval(process.env.NODE_ENV);
