@@ -41,7 +41,7 @@ const develpoment = {
 
 const production = {
     name: 'production',
-    asset_path: './public/assets',
+    asset_path: process.env.codeial_asset_path,
     session_cookie_key: process.env.codeial_session_cookie_key,
     db: 'codeial_production',
     smtp: {
