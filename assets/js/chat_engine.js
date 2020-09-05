@@ -1,69 +1,68 @@
-class ChatEngine {
-    constructor(chatBoxId, userEmail){
-        this.chatBox = $(`#${chatBoxId}`);
+class ChatEngine
+{
+    constructor(chatBoxId, userEmail)
+    {
+        this.chatbox = $(`#${chatBoxId}`);
         this.userEmail = userEmail;
 
-        this.socket = io.connect(' http://54.210.48.249:5000');
+        this.socket = io.connect('http://54.88.219.38:5000');
 
-        if(this.userEmail){
+        if (this.userEmail)
             this.connectionHandler();
-        }
     }
-    // try 
-
-    connectionHandler(){
-        let self = this;
-
-
-        this.socket.on('connect', function(){
-            console.log('connection established using sockets');
-
-
-            self.socket.emit('join_room', {
-                user_email: self.userEmail,
-                chatroom: 'codeial'
+    connectionHandler()
+    {
+        let self=this;
+        this.socket.on('connect', function ()
+        {
+            console.log('Connection Established using sockets!');
+            self.socket.emit('join_room', 
+            {
+                user_email:self.userEmail,
+                chatroom:'Comspace Express'
             });
-
-            self.socket.on('user_joined', function(data){
-                console.log('a user joined', data);
-            })
+            self.socket.on('user_joined', function(data)
+            {
+                console.log('A user has joined', data);
+            });
         });
 
-        $('#send-message').click(function(){
-            let msg = $('#chat-message-input').val();
-
-            if(msg != ''){
+        $('#send-message').click(function(event)
+        {
+            event.preventDefault();
+            let message=$('#message').val();
+            if(message!='')
+            {
+                $('#message').val('')
                 self.socket.emit('send_message', {
-                    message: msg,
-                    user_email: self.userEmail,
-                    chatroom: 'codeial'
+                    message:message,
+                    user_email:self.userEmail,
+                    chatroom:'Comspace Express'
                 });
             }
         });
 
-        self.socket.on('receive_message', function(data){
-            console.log('message recieved', data.message);
-
-            let newMessage = $('<li>');
-
-            let messageType = 'other-message';
-
-            if(data.user_email == self.userEmail){
-                messageType = 'self-message'
+        self.socket.on('recieve_message', function(data)
+        {
+            console.log('Recieved some message!', data);
+            let newMessage=$('<li>');
+            let message_type='other-message';
+            if(data.user_email==self.userEmail)
+            {
+                message_type='self-message';
             }
-
             newMessage.append($('<span>', {
-                'html': data.message
+                html:data.message
             }));
+            /* break line */
+            newMessage.append($('<br>'));
 
-            newMessage.append($('<sub>', {
-                'html': data.user_email
+            newMessage.append($('<small>', {
+                html:data.user_email
             }));
-
-            newMessage.addClass(messageType);
-
-            $('#chat-messages-list').append(newMessage);
-
+            newMessage.addClass(message_type);
+            $('#message-list').append(newMessage);
         })
     }
 }
+/* this class is initialized in home.ejs */

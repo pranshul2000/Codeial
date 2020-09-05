@@ -36,8 +36,9 @@
 </div>
 
 <script src="<%= assetPath('js/home_post_comments.js') %>"></script>
-<script src="<%= assetPath('js/home_posts.js') %>"></script>
 
+<script src="<%=assetPath('js/home_posts.js')%>"></script>
+<script src="<%=assetPath('js/home.js')%>"></script>
 <script src="<%= assetPath('js/toggle_likes.js') %>"></script>
 <script>
     $('.toggle-like-button').each(function () {
@@ -45,6 +46,7 @@
         let toggleLike = new ToggleLike(self);
     });
 </script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
 <script src="<%=assetPath('js/chat_engine.js')%>"></script>
 <%if(locals.user){%>
@@ -52,4 +54,3 @@
     new ChatEngine('user-chatbox', "<%=locals.user.email %>")
 </script>
 <%}%>
-<!-- just a second -->
